@@ -176,7 +176,7 @@ const goBack = () => {
                     <Text style={estilo.textError}>{parcelasValida?'':'Em quantas vezes foi?' }</Text>
                    
                     <View style={estilo.boxSwitch}>
-                        <Text style={estilo.textSwitch}>Pago</Text>
+                        <Text style={estilo.textSwitch}>Pago ?</Text>
                        <Switch 
                         trackColor={{ false: "#767577", true: "#648251" }}
                         thumbColor={pago ? "#6fa848" : "#f4f3f4"}
