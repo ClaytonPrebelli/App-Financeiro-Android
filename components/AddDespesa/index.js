@@ -3,7 +3,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { View, Text, Switch, Alert} from 'react-native';
 import { Input,Button } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import api from '../../services/api'; 
+import axios from "axios";
 
 import estilo from './estilo'
 
@@ -109,14 +109,22 @@ const validaForm = () => {
         }
         JSON.stringify(objetoEnvia)
         console.log(objetoEnvia)
-        const response = api.post('/Despesas/createDespesas/', objetoEnvia)
+        
+       axios.post('https://financasback.azurewebsites.net/Despesas/createDespesas/', objetoEnvia, {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Content-Type': 'application/json',
+        },
+       })
         .then(response => {
-           console.log(response.data)
-            props.navigation.navigate('Despesas')
+            alert(`Despesa ${nome} adicionada`)
+            limpaForm()
+              props.navigation.navigate('Home')
         })
         .catch(error => {
-            console.log(error)
-            Alert(error)
+            alert("Deu ruim!!!")
         })
 
 }
