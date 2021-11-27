@@ -98,7 +98,7 @@ const validaForm = () => {
         setParcelasValida(true)
     }
 
-    if(nomeValida && valorValida && dateValida && mesValida && parcelasValida){
+    if(nome.length>0 && valor.length>0 && date.length>0 && mes.length>0 && parcelas.length>0){
         let objetoEnvia ={
             nome: nome,
             valor: valor,
