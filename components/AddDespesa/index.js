@@ -108,7 +108,6 @@ const validaForm = () => {
             pago: pago
         }
         JSON.stringify(objetoEnvia)
-        console.log(objetoEnvia)
         
        axios.post('https://financasback.azurewebsites.net/Despesas/createDespesas/', objetoEnvia, {
         method: 'POST',
@@ -144,7 +143,7 @@ const limpaForm = () => {
 }
 const goBack = () => {
     limpaForm();
-    props.navigation.goBack();
+    props.navigation.goBack().then(() => props.navigation.state.params.refresh());
 }
 
 

@@ -7,6 +7,9 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import Home from './components/Home';
 import Topo from './components/Topo';
 import AddDespesa from './components/AddDespesa';
+import ListDespesa from './components/ListDespesa';
+
+
 const Drawer = createDrawerNavigator();
 
 
@@ -17,7 +20,8 @@ export default function App() {
       <Drawer.Navigator screenOptions={{headerShown:false,}}>
     
         <Drawer.Screen name="Home" component={Home} />
-        <Drawer.Screen name="AddDespesa" component={AddDespesa} />
+        <Drawer.Screen name="Add Despesa" component={AddDespesa} />
+        <Drawer.Screen name="Listar Despesa" component={ListDespesa} />
       </Drawer.Navigator>
     </NavigationContainer>
 
