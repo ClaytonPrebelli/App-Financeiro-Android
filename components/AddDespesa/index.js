@@ -143,7 +143,7 @@ const limpaForm = () => {
 }
 const goBack = () => {
     limpaForm();
-    props.navigation.goBack().then(() => props.navigation.state.params.refresh());
+    props.navigation.goBack();
 }
 
 

@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
-import { View, Text, Switch, Alert, RefreshControl} from 'react-native';
+import { View, Text, Switch} from 'react-native';
 import { Card, ListItem, Button, Icon, Divider } from 'react-native-elements'
 import axios from "axios";
 
@@ -10,36 +10,10 @@ const wait = (timeout) => {
     return new Promise(resolve => setTimeout(resolve, timeout));
   }
   
-  const despesas =[
-    {
 
-    }
-]
 var mesAtual = (new Date().getMonth())+1;
+var listaTemp = [];
 
-
-
-axios.get('https://financasback.azurewebsites.net/Despesas/ListDespesas',{
-    method: 'GET',
-        mode: 'cors',
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Content-Type': 'application/json',
-        },
-})
-.then(function (response) {
-  despesas.pop();
-    for(let i = 0; i < response.data.length; i++){
-        if (response.data[i].mesRef == mesAtual){
-        despesas.push(response.data[i]);
-        }
-    }
-    formataValor(despesas);
-
-})
-.catch(function (error) {
-    console.log(error);
-});
 
 const formataValor = (despesas) => {
     for(let i = 0; i < despesas.length; i++){
@@ -49,28 +23,82 @@ const formataValor = (despesas) => {
   }
 
 const ListDespesa = ({navigation}) => {
- 
+  const [atualiza, setAtualiza] = useState(false);
+  const [despesas, setDespesas] = useState([]);
+  useEffect(() => {
+axios.get('https://financasback.azurewebsites.net/Despesas/ListDespesas',{
+    method: 'GET',
+        mode: 'cors',
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Content-Type': 'application/json',
+        },
+})
+.then(function (response) {
+    listaTemp = []
+    for(let i = 0; i < response.data.length; i++){
+        if (response.data[i].mesRef == mesAtual){
+        listaTemp.push(response.data[i]);
+        }
+    }
+  // ordenar por pago
+  listaTemp.sort(function(a, b){
+    return a.pago - b.pago;
+  });
+  
+    formataValor(listaTemp);
+    setDespesas(listaTemp);
 
-
-    const [refreshing, setRefreshing] = React.useState(false);
-
-    const onRefresh = React.useCallback(() => {
-      setRefreshing(true);
-      wait(2000).then(() => setRefreshing(true));
-    }, [])
+})
+.catch(function (error) {
+    console.log(error);
+});
+  }, [atualiza]);
+  
     
     const goBack = () => {
       navigation.navigate("Home");
   }
+  const recarregarLista = () => {
+    setAtualiza(!atualiza);
+  }
+
+  const pagarDespesa = (id) => {
+
+  }
+
+
     return(
-        <ScrollView
-        refreshControl={
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={onRefresh}
-            />
-          }>
+      <View>
+        <View style={estilo.header}>
+         <Button title="Atualizar" titleStyle={{color:'#fff',textShadowColor:'#000',textShadowOffset:{width:1,height:1},textShadowRadius:1}} buttonStyle={estilo.btAtualiza} onPress={recarregarLista} 
+             icon={
+                    <Icon
+                    name="sync"
+                    size={22}
+                    color="#fff"
+                    style={{
+                      marginRight:10,
+                      textShadowColor:'#000',textShadowOffset:{width:1,height:1},textShadowRadius:1
+                  }}/>
+                }/>
+                <Button title="Voltar" titleStyle={{color:'#fff',textShadowColor:'#000',textShadowOffset:{width:1,height:1},textShadowRadius:1}} buttonStyle={estilo.btVoltar} onPress={goBack} 
+             icon={
+                    <Icon
+                    name="undo"
+                    size={22}
+                    color="#fff"
+                    style={{
+                        marginRight:10,
+                        textShadowColor:'#000',textShadowOffset:{width:1,height:1},textShadowRadius:1
+                    }}
+                    />
+                }/>
+                </View>
+        <ScrollView>
+        
             <View style={estilo.container}>
+           
             <Card>
   <Card.Title>Despesas</Card.Title>
   <Card.Divider/>
@@ -84,7 +112,13 @@ const ListDespesa = ({navigation}) => {
                   
                   <Text style={estilo.linhaValor}> R$ {u.valor}</Text>
               </View>
-
+              <Switch 
+                        trackColor={{ false: "#767577", true: "#648251" }}
+                        thumbColor={u.pago ? "#6fa848" : "#f4f3f4"}
+                        ios_backgroundColor="#3e3e3e"
+                        onValueChange={pagarDespesa(u.id)}
+                        value={u.pago}
+      />
           </View>
           <Divider orientation="horizontal" />
         </View>
@@ -94,21 +128,11 @@ const ListDespesa = ({navigation}) => {
     })
   }
 </Card>
-<Button title="Voltar" titleStyle={{color:'#fff',textShadowColor:'#000',textShadowOffset:{width:1,height:1},textShadowRadius:1}} buttonStyle={estilo.btVoltar} onPress={goBack} 
-             icon={
-                    <Icon
-                    name="undo"
-                    size={18}
-                    color="#fff"
-                    style={{
-                        marginRight:10,
-                        textShadowColor:'#000',textShadowOffset:{width:1,height:1},textShadowRadius:1
-                    }}
-                    />
-                }/>
+
+               
             </View>
         </ScrollView>
-
+        </View>
     );
 }
 
