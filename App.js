@@ -8,6 +8,8 @@ import Home from './components/Home';
 import Topo from './components/Topo';
 import AddDespesa from './components/AddDespesa';
 import ListDespesa from './components/ListDespesa';
+import ListReceita from './components/ListReceita';
+import AddReceita from './components/AddReceita';
 
 
 const Drawer = createDrawerNavigator();
@@ -22,6 +24,8 @@ export default function App() {
         <Drawer.Screen name="Home" component={Home} />
         <Drawer.Screen name="Add Despesa" component={AddDespesa} />
         <Drawer.Screen name="Listar Despesa" component={ListDespesa} />
+        <Drawer.Screen name="Add Receita" component={AddReceita} />
+        <Drawer.Screen name="Listar Receita" component={ListReceita} />
       </Drawer.Navigator>
     </NavigationContainer>
 

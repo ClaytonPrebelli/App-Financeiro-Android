@@ -64,9 +64,9 @@ const Home = ({navigation}) => {
                     <Image source={Receitas} style={estilo.cardImage}/>
                     <View style={estilo.cardFooter}> 
                     <Button buttonStyle={estilo.btnAdd}
-                     icon={ <Icon name="plus-square" style={{fontSize:23,}} color="#000" />}type="solid" raised='true' />
+                     icon={ <Icon name="plus-square" style={{fontSize:23,}} color="#000" />}type="solid" raised='true' onPress={()=> navigation.navigate("Add Receita")}/>
                      <Button buttonStyle={estilo.btnView}
-                     icon={ <Icon name="list-alt" color="#000" style={{fontSize:23,}} />}type="solid" raised='true' />
+                     icon={ <Icon name="list-alt" color="#000" style={{fontSize:23,}} />}type="solid" raised='true' onPress={()=> navigation.navigate("Listar Receita")}/>
                     </View>
                 </View>
                 <View style={estilo.cardDown} >

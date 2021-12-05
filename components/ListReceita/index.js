@@ -15,18 +15,18 @@ var mesAtual = (new Date().getMonth())+1;
 var listaTemp = [];
 
 
-const formataValor = (despesas) => {
-    for(let i = 0; i < despesas.length; i++){
-        despesas[i].valor = despesas[i].valor.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1');
-        despesas[i].valor = despesas[i].valor.toString().replace(".", ",");
+const formataValor = (receitas) => {
+    for(let i = 0; i < receitas.length; i++){
+        receitas[i].valor = receitas[i].valor.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1');
+        receitas[i].valor = receitas[i].valor.toString().replace(".", ",");
     }
   }
 
-const ListDespesa = ({navigation}) => {
+const ListReceita = ({navigation}) => {
   const [atualiza, setAtualiza] = useState(false);
-  const [despesas, setDespesas] = useState([]);
+  const [receitas, setReceitas] = useState([]);
   useEffect(() => {
-axios.get('https://financasback.azurewebsites.net/Despesas/ListDespesas',{
+axios.get('https://financasback.azurewebsites.net/Receitas/ListReceitas',{
     method: 'GET',
         mode: 'cors',
         headers: {
@@ -39,7 +39,7 @@ axios.get('https://financasback.azurewebsites.net/Despesas/ListDespesas',{
     
     for(let i = 0; i < response.data.length; i++){
      
-        if (response.data[i].mesRef == mesAtual && (response.data[i].vencimento).substring(response.data[i].vencimento.length-4) == new Date().getFullYear()){
+        if (response.data[i].mesRef == mesAtual && response.data[i].anoRef == new Date().getFullYear()){
         listaTemp.push(response.data[i]);
         
         }
@@ -53,7 +53,7 @@ axios.get('https://financasback.azurewebsites.net/Despesas/ListDespesas',{
   });
 
     formataValor(listaTemp);
-    setDespesas(listaTemp);
+    setReceitas(listaTemp);
 
 })
 .catch(function (error) {
@@ -78,7 +78,7 @@ axios.get('https://financasback.azurewebsites.net/Despesas/ListDespesas',{
       u.valor = parseFloat(u.valor);
       u.valor = u.valor.toFixed(2);
     }
-    axios.put('https://financasback.azurewebsites.net/Despesas/UpdateDespesa', u,{
+    axios.put('https://financasback.azurewebsites.net/Receitas/updateReceita', u,{
         method: 'PUT',
         mode: 'cors',
         headers: {
@@ -87,7 +87,7 @@ axios.get('https://financasback.azurewebsites.net/Despesas/ListDespesas',{
         },
     })
     .then(function (response) {
-       Alert("Despesa atualizada com sucesso!");
+       Alert("receita atualizada com sucesso!");
     })
     .catch(function (error) {
         console.log(error);
@@ -95,8 +95,8 @@ axios.get('https://financasback.azurewebsites.net/Despesas/ListDespesas',{
     recarregarLista();
     return u
   }
-  const deleteDespesa = (id) => {
-    axios.delete('https://financasback.azurewebsites.net/Despesas/deleteDespesa/'+id,{
+  const deleteReceita = (id) => {
+    axios.delete('https://financasback.azurewebsites.net/Receitas/deleteReceita/'+id,{
         method: 'DELETE',
         mode: 'cors',
         headers: {
@@ -105,7 +105,7 @@ axios.get('https://financasback.azurewebsites.net/Despesas/ListDespesas',{
         },
     }).
     then(function (response) {
-        alert("Despesa excluida com sucesso!");
+        alert("Receita excluida com sucesso!");
     }
     ).catch(function (error) {
         console.log(error);
@@ -148,10 +148,10 @@ axios.get('https://financasback.azurewebsites.net/Despesas/ListDespesas',{
             <View style={estilo.container}>
            
             <Card>
-  <Card.Title>Despesas</Card.Title>
+  <Card.Title>Receitas</Card.Title>
   <Card.Divider/>
   {
-   despesas.map((u, i) => {
+   receitas.map((u, i) => {
       return (
         <View key={i} >
             <View style={estilo.itemLinha}>
@@ -172,7 +172,7 @@ axios.get('https://financasback.azurewebsites.net/Despesas/ListDespesas',{
                         }
               />
               <Button title="x" titleStyle={{fontSize:14,marginTop:-9,color:'#fff',textShadowColor:'#000',textShadowOffset:{width:1,height:1},textShadowRadius:1}} buttonStyle={estilo.btExcluir} onPress={() => {
-                deleteDespesa(u.id)
+                deleteReceita(u.id)
               }}
               />
           </View>
@@ -192,4 +192,4 @@ axios.get('https://financasback.azurewebsites.net/Despesas/ListDespesas',{
     );
 }
 
-export default ListDespesa;
+export default ListReceita;
